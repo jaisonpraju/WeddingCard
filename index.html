@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jaison Weds Glory</title>
+  <meta name="description" content="Modern interactive wedding invitation for Jaison and Glory" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#faf6ef;
+      --bg-soft:#f4eddf;
+      --panel:rgba(255,250,242,.88);
+      --panel-2:rgba(255,248,238,.92);
+      --gold:#bf9448;
+      --gold-soft:#9c7330;
+      --gold-deep:#7a5a22;
+      --ivory:#433423;
+      --muted:#7e6642;
+      --line:rgba(191,148,72,.16);
+      --shadow:0 14px 36px rgba(95,73,38,.10);
+      --radius:30px;
+      --radius-lg:40px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      color:var(--ivory);
+      font-family:'Inter',ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      background:
+        radial-gradient(circle at 12% 18%, rgba(191,148,72,.06), transparent 24%),
+        radial-gradient(circle at 82% 14%, rgba(191,148,72,.04), transparent 20%),
+        linear-gradient(180deg, #fffdf9 0%, #faf6ef 40%, #f7f1e5 100%);
+      overflow-x:hidden;
+      letter-spacing:.01em;
+    }
+    h1,h2,h3,.serif{font-family:'Cormorant Garamond', Georgia, serif}
+    .script{font-family:'Great Vibes', cursive}
+    a{color:inherit}
+    img{max-width:100%;display:block}
+
+    .progress{
+      position:fixed;
+      top:0; left:0;
+      height:3px;
+      width:0;
+      z-index:999;
+      background:linear-gradient(90deg,var(--gold-deep),var(--gold),var(--gold-soft));
+      box-shadow:0 0 18px rgba(212,175,102,.65);
+    }
+    .ambient,.petals{position:fixed; inset:0; pointer-events:none}
+    .ambient{z-index:-2; overflow:hidden}
+    .petals{display:none}
+    .orb{
+      position:absolute;
+      border-radius:50%;
+      filter:blur(48px);
+      opacity:.35;
+      animation:float 18s ease-in-out infinite alternate;
+    }
+    @keyframes float{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(18px,-16px,0) scale(1.04)}}
+
+    .nav-shell{
+      position:fixed;
+      top:14px; left:50%;
+      transform:translateX(-50%);
+      z-index:100;
+      width:min(94%,560px);
+    }
+    .nav{
+      display:flex;
+      justify-content:center;
+      gap:8px;
+      padding:10px;
+      border-radius:999px;
+      background:rgba(255,250,242,.82);
+      border:1px solid rgba(191,148,72,.14);
+      backdrop-filter:blur(10px);
+      box-shadow:var(--shadow);
+    }
+    .nav a{
+      text-decoration:none;
+      color:var(--muted);
+      padding:10px 14px;
+      border-radius:999px;
+      font-size:.92rem;
+      transition:transform .25s ease, background .25s ease, color .25s ease, box-shadow .25s ease;
+    }
+    .nav a:hover,.nav a.active{
+      transform:translateY(-2px);
+      background:rgba(212,175,102,.10);
+      color:var(--gold-soft);
+      box-shadow:inset 0 0 0 1px rgba(212,175,102,.18);
+    }
+
+    section{
+      position:relative;
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      padding:92px 16px 60px;
+    }
+    .wrap{width:min(1120px,100%); margin:auto}
+    .glass{
+      background:linear-gradient(180deg, rgba(255,251,245,.95), rgba(255,247,237,.90));
+      border:1px solid rgba(191,148,72,.14);
+      backdrop-filter:blur(10px);
+      box-shadow:var(--shadow);
+      border-radius:var(--radius-lg);
+    }
+    .hero-card{
+      padding:38px 22px 30px;
+      text-align:center;
+      position:relative;
+      overflow:hidden;
+      isolation:isolate;
+    }
+    .hero-card::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(circle at top left, rgba(212,175,102,.12), transparent 30%),
+        linear-gradient(135deg, rgba(212,175,102,.06), rgba(255,255,255,0) 42%, rgba(212,175,102,.10) 100%);
+      z-index:-1;
+    }
+    .hero-card::after{
+      content:"";
+      position:absolute;
+      inset:14px;
+      border:1px solid rgba(212,175,102,.08);
+      border-radius:32px;
+      pointer-events:none;
+    }
+    .bible{
+      display:inline-block;
+      padding:12px 18px;
+      border-radius:999px;
+      background:rgba(255,255,255,.78);
+      border:1px solid rgba(191,148,72,.14);
+      color:var(--muted);
+      font-size:.92rem;
+      line-height:1.6;
+      max-width:760px;
+    }
+    .hero-title{
+      margin:20px 0 10px;
+      font-size:clamp(3.6rem,12vw,6.8rem);
+      line-height:.94;
+      letter-spacing:.03em;
+      color:var(--gold-soft);
+      text-shadow:0 0 10px rgba(191,148,72,.06);
+      padding:0 .1em;
+    }
+    .hero-title .line{display:block; overflow:hidden}
+    .hero-title .char{
+      display:inline-block;
+      opacity:0;
+      transform:translateY(120%) rotate(8deg) scale(.95);
+      transition:transform .85s cubic-bezier(.2,.8,.2,1), opacity .85s ease, filter .85s ease;
+      filter:blur(8px);
+    }
+    .hero.visible .hero-title .char{opacity:1; transform:translateY(0) rotate(0) scale(1); filter:blur(0)}
+    .amp{
+      display:block;
+      font-size:clamp(1.4rem,4vw,2rem);
+      color:var(--gold);
+      margin:.16em 0;
+      letter-spacing:.30em;
+      text-transform:uppercase;
+    }
+    .hero-note{
+      max-width:720px;
+      margin:18px auto 0;
+      color:#6f5839;
+      line-height:1.85;
+      font-size:1rem;
+    }
+    .hero-stats{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:14px;
+      margin-top:24px;
+    }
+    .pill-card{
+      padding:16px;
+      border-radius:24px;
+      background:linear-gradient(180deg, rgba(255,255,255,.96), rgba(251,246,238,.90));
+      border:1px solid rgba(191,148,72,.12);
+      color:#5b452b;
+    }
+    .pill-card strong{display:block; margin-bottom:6px; font-size:.98rem; color:var(--gold-soft)}
+    .scroll-cue{
+      margin-top:18px;
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      color:var(--muted);
+      animation:bob 2.3s ease-in-out infinite;
+    }
+    @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
+
+    .section-shell{
+      display:grid;
+      gap:18px;
+      grid-template-columns:1fr 1fr;
+      align-items:stretch;
+    }
+    .card{
+      padding:24px;
+      position:relative;
+      overflow:hidden;
+      border-radius:var(--radius-lg);
+      background:linear-gradient(180deg, rgba(255,252,247,.96), rgba(250,244,234,.92));
+      border:1px solid rgba(191,148,72,.12);
+      box-shadow:var(--shadow);
+    }
+    .card::after{
+      content:"";
+      position:absolute;
+      inset:auto -40px -80px auto;
+      width:190px;
+      height:190px;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(212,175,102,.16), transparent 68%);
+      pointer-events:none;
+    }
+    .kicker{
+      display:inline-block;
+      padding:8px 14px;
+      border-radius:999px;
+      font-size:.76rem;
+      text-transform:uppercase;
+      letter-spacing:.20em;
+      color:var(--gold);
+      background:linear-gradient(90deg, rgba(212,175,102,.12), rgba(212,175,102,.05));
+      border:1px solid rgba(212,175,102,.14);
+    }
+    .headline{
+      margin:12px 0 10px;
+      font-size:clamp(1.55rem,4.8vw,2.5rem);
+      line-height:1;
+      color:var(--gold-soft);
+    }
+    .desc{color:#745c3d; line-height:1.8; margin:0 0 16px; font-size:.96rem}
+    .details{
+      display:grid;
+      gap:12px;
+      grid-template-columns:repeat(2,1fr);
+    }
+    .detail{
+      padding:16px;
+      border-radius:22px;
+      background:linear-gradient(180deg, rgba(255,255,255,.94), rgba(250,245,236,.90));
+      border:1px solid var(--line);
+      opacity:0;
+      transform:translateY(18px);
+      transition:all .55s ease;
+    }
+    .visible .detail{opacity:1; transform:translateY(0)}
+    .detail:nth-child(2){transition-delay:.08s}
+    .detail:nth-child(3){transition-delay:.16s}
+    .detail:nth-child(4){transition-delay:.24s}
+    .label{
+      font-size:.72rem;
+      text-transform:uppercase;
+      letter-spacing:.20em;
+      color:var(--gold);
+      margin-bottom:8px;
+    }
+    .value{font-size:.97rem; line-height:1.55; color:var(--ivory)}
+
+    .location-box{
+      margin-top:14px;
+      display:grid;
+      grid-template-columns:1fr;
+      gap:14px;
+      align-items:center;
+      padding:18px;
+      border-radius:26px;
+      background:linear-gradient(135deg, rgba(255,255,255,.95), rgba(250,245,236,.90));
+      border:1px solid var(--line);
+    }
+    .actions{display:flex; flex-wrap:wrap; gap:10px; margin-top:12px}
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      padding:13px 18px;
+      border-radius:999px;
+      text-decoration:none;
+      background:linear-gradient(135deg, rgba(255,255,255,.98), rgba(248,241,230,.92));
+      border:1px solid rgba(191,148,72,.16);
+      color:var(--gold-deep);
+      box-shadow:0 6px 18px rgba(95,73,38,.08);
+      transition:transform .2s ease, box-shadow .2s ease, background .2s ease, border-color .2s ease;
+    }
+    .btn:hover{transform:translateY(-2px); box-shadow:0 10px 24px rgba(95,73,38,.12); border-color:rgba(191,148,72,.28)}
+    .btn.primary{background:linear-gradient(135deg, rgba(191,148,72,.16), rgba(245,235,214,.95))}
+
+    .story{display:grid; gap:12px}
+    .moment{
+      position:relative;
+      padding:16px 16px 16px 18px;
+      border-radius:24px;
+      background:linear-gradient(180deg, rgba(255,255,255,.94), rgba(250,245,236,.90));
+      border:1px solid var(--line);
+      color:#745c3d;
+    }
+        .moment strong{display:block; color:var(--gold-soft); margin-bottom:6px}
+
+    .closing{
+      text-align:center;
+      padding:40px 18px;
+      font-size:clamp(1.05rem,4vw,1.8rem);
+      line-height:1.9;
+      color:var(--gold-deep);
+    }
+
+    .reveal,.fade-up,.word-wave span{
+      opacity:0;
+      transform:translateY(18px);
+      transition:opacity .55s ease, transform .55s cubic-bezier(.2,.8,.2,1);
+    }
+    .visible.reveal,
+    .visible .fade-up,
+    .visible .word-wave span,
+    .visible.fade-up{
+      opacity:1;
+      transform:translateY(0);
+    }
+    .word-wave span{display:inline-block}
+    .parallax{will-change:transform}
+
+    .divider{
+      width:110px;
+      height:1px;
+      margin:16px auto;
+      background:linear-gradient(90deg, transparent, rgba(212,175,102,.75), transparent);
+    }
+
+    .footer{
+      text-align:center;
+      padding:24px 16px 42px;
+      color:var(--muted);
+      font-size:.92rem;
+    }
+
+    @media (max-width: 860px){
+      .section-shell,.hero-stats,.details,.location-box{grid-template-columns:1fr}
+      .hero-card{padding-top:30px}
+      .nav{gap:4px; padding:8px}
+      .nav a{padding:9px 11px; font-size:.82rem}
+      .card{padding:18px}
+      .actions{justify-content:flex-start}
+    }
+  </style>
+</head>
+<body>
+  <div class="progress" id="progress"></div>
+
+  <div class="ambient" aria-hidden="true">
+    <div class="orb" style="left:4%;top:8%;width:220px;height:220px;background:rgba(212,175,102,.13)"></div>
+    <div class="orb" style="right:4%;top:12%;width:220px;height:220px;background:rgba(240,223,176,.10);animation-duration:15s"></div>
+    <div class="orb" style="left:18%;bottom:10%;width:260px;height:260px;background:rgba(212,175,102,.11);animation-duration:17s"></div>
+    <div class="orb" style="right:12%;bottom:6%;width:220px;height:220px;background:rgba(212,175,102,.08);animation-duration:13s"></div>
+  </div>
+  
+
+  <div class="nav-shell">
+    <nav class="nav" id="nav">
+      <a href="#home">Home</a>
+      <a href="#engagement">Engagement</a>
+      <a href="#wedding">Wedding</a>
+      <a href="#blessing">Blessing</a>
+    </nav>
+  </div>
+
+  <section id="home">
+    <div class="wrap hero visible">
+      <div class="hero-card glass reveal parallax" data-speed="0.05">
+        <div class="bible fade-up serif">“My beloved is mine, and I am his” — Songs of Solomon 2:16</div>
+        <div class="divider"></div>
+        <h1 class="hero-title" id="animatedTitle">
+          <span class="line">Jaison</span>
+          <span class="amp serif">weds</span>
+          <span class="line">Glory</span>
+        </h1>
+        <p class="hero-note fade-up">
+          With grateful hearts and joyful love, we warmly invite you to be part of our engagement and wedding celebration.
+          Scroll down to watch this invitation gently bloom.
+        </p>
+
+        <div class="hero-stats fade-up">
+          <div class="pill-card">
+            <strong>Engagement</strong>
+            Saturday 23 May 2026<br>@ 10:30 am
+          </div>
+          <div class="pill-card">
+            <strong>Wedding</strong>
+            Monday, 25 May 2026<br>@ 10:30 am
+          </div>
+          <div class="pill-card">
+            <strong>Celebration Venue</strong>
+            Loyal Convention Centre<br>Kumbanadu, Thiruvalla
+          </div>
+        </div>
+
+        <div class="scroll-cue">Scroll to reveal the celebration ↓</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="engagement">
+    <div class="wrap section-shell">
+      <article class="card reveal parallax" data-speed="0.08">
+        <span class="kicker">Engagement Details</span>
+        <h2 class="headline word-wave">A graceful beginning</h2>
+        <p class="desc fade-up">Join us as our families gather in prayer, joy, and love to celebrate the beginning of our forever.</p>
+
+        <div class="details">
+          <div class="detail">
+            <div class="label">Date</div>
+            <div class="value">Saturday 23 May 2026</div>
+          </div>
+          <div class="detail">
+            <div class="label">Time</div>
+            <div class="value">@ 10:30 am</div>
+          </div>
+          <div class="detail">
+            <div class="label">Venue</div>
+            <div class="value">St. Kuriakose Parish Hall, Ennathu</div>
+          </div>
+          <div class="detail">
+            <div class="label">Location</div>
+            <div class="value">Tap the venue link below</div>
+          </div>
+        </div>
+
+        <div class="location-box fade-up">
+          <div>
+            <div class="label">Venue location</div>
+            <div class="value">St. Kuriakose Parish Hall, Ennathu</div>
+            <div class="actions">
+              <a class="btn primary" href="https://maps.app.goo.gl/hF189m5P3u7TQ6XQ9" target="_blank" rel="noopener">Open map ↗</a>
+              <a class="btn" href="https://maps.app.goo.gl/hF189m5P3u7TQ6XQ9" target="_blank" rel="noopener">View venue link</a>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card reveal">
+        <span class="kicker">Ceremony Flow</span>
+        <h2 class="headline fade-up">Moments to cherish</h2>
+        <div class="story fade-up">
+          <div class="moment"><strong>Warm welcome</strong>Gather with family and loved ones as the day begins with happiness and blessings.</div>
+          <div class="moment"><strong>Celebration</strong>Stay with us for smiles, prayers, photos, and joyful fellowship after the ceremony.</div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="wedding">
+    <div class="wrap section-shell">
+      <article class="card reveal">
+        <span class="kicker">Wedding Details</span>
+        <h2 class="headline word-wave">Our blessed day</h2>
+        <p class="desc fade-up">Your presence will make our wedding day even more beautiful. We would be delighted to celebrate this sacred moment with you.</p>
+
+        <div class="details">
+          <div class="detail">
+            <div class="label">Date</div>
+            <div class="value">Monday, 25 May 2026</div>
+          </div>
+          <div class="detail">
+            <div class="label">Time</div>
+            <div class="value">@ 10:30 am</div>
+          </div>
+          <div class="detail">
+            <div class="label">Venue</div>
+            <div class="value">Loyal Convention Centre</div>
+          </div>
+          <div class="detail">
+            <div class="label">Place</div>
+            <div class="value">Kumbanadu, Thiruvalla</div>
+          </div>
+        </div>
+
+        <div class="location-box fade-up">
+          <div>
+            <div class="label">Venue location</div>
+            <div class="value">Loyal Convention Centre, Kumbanadu, Thiruvalla</div>
+            <div class="actions">
+              <a class="btn primary" href="https://maps.app.goo.gl/hF189m5P3u7TQ6XQ9" target="_blank" rel="noopener">Open map ↗</a>
+              <a class="btn" href="https://maps.app.goo.gl/hF189m5P3u7TQ6XQ9" target="_blank" rel="noopener">View venue link</a>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card reveal parallax" data-speed="0.1">
+        <span class="kicker">Wedding Celebration</span>
+        <h2 class="headline fade-up">Love, prayer & joy</h2>
+        <div class="story fade-up">
+          <div class="moment"><strong>Gathering of loved ones</strong>A beautiful morning filled with grace, expectation, and joy.</div>
+          <div class="moment"><strong>Wedding ceremony</strong>The sacred moment where we begin our next chapter together.</div>
+          <div class="moment"><strong>Shared celebration</strong>Stay with us as the happiness continues with family, friends, and heartfelt blessings.</div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="blessing">
+    <div class="wrap">
+      <div class="glass closing reveal parallax" data-speed="0.05">
+        <div class="serif word-wave">We would be honored by your presence and prayers as we celebrate this beautiful beginning together.</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="footer">Made with love for Jaison &amp; Glory</div>
+
+  <script>
+    const title = document.getElementById('animatedTitle');
+    title.querySelectorAll('.line').forEach((line, lineIndex) => {
+      const text = line.textContent;
+      line.textContent = '';
+      [...text].forEach((ch, i) => {
+        const span = document.createElement('span');
+        span.className = 'char';
+        span.textContent = ch === ' ' ? '\u00A0' : ch;
+        span.style.transitionDelay = (lineIndex * 0.28 + i * 0.07) + 's';
+        line.appendChild(span);
+      });
+    });
+
+    document.querySelectorAll('.word-wave').forEach(block => {
+      const text = block.textContent.trim();
+      block.textContent = '';
+      [...text].forEach((ch, i) => {
+        const span = document.createElement('span');
+        span.textContent = ch === ' ' ? '\u00A0' : ch;
+        span.style.transitionDelay = (i * 0.04) + 's';
+        block.appendChild(span);
+      });
+    });
+
+    const progress = document.getElementById('progress');
+    const updateProgress = () => {
+      const h = document.documentElement;
+      const total = h.scrollHeight - h.clientHeight;
+      const scrolled = total > 0 ? (h.scrollTop / total) * 100 : 0;
+      progress.style.width = scrolled + '%';
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, {threshold: 0.16});
+
+    document.querySelectorAll('.reveal, .fade-up, .hero').forEach(el => observer.observe(el));
+
+    const sections = [...document.querySelectorAll('section')];
+    const navLinks = [...document.querySelectorAll('.nav a')];
+    const setActiveNav = () => {
+      let current = sections[0].id;
+      sections.forEach(sec => {
+        const rect = sec.getBoundingClientRect();
+        if (rect.top <= window.innerHeight * 0.35) current = sec.id;
+      });
+      navLinks.forEach(link => {
+        link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+      });
+    };
+
+    const parallaxEls = [...document.querySelectorAll('.parallax')];
+    const onScroll = () => {
+      updateProgress();
+      setActiveNav();
+      const scrollY = window.scrollY;
+      parallaxEls.forEach(el => {
+        const speed = parseFloat(el.dataset.speed || '0.05');
+        const rect = el.getBoundingClientRect();
+        const dist = rect.top + rect.height / 2 - window.innerHeight / 2;
+        el.style.transform = `translateY(${dist * speed * -1}px)`;
+      });
+      document.body.style.backgroundPosition = `0 ${scrollY * 0.025}px, 0 ${scrollY * -0.016}px, 0 ${scrollY * 0.012}px, 0 0`;
+    };
+
+    document.addEventListener('scroll', onScroll, {passive:true});
+    onScroll();
+
+    const petals = document.getElementById('petals');
+    
+    const nav = document.getElementById('nav');
+    
+
+    document.querySelectorAll('.btn').forEach((btn) => {
+      btn.addEventListener('mouseenter', () => btn.style.transform = 'translateY(-2px)');
+      btn.addEventListener('mouseleave', () => btn.style.transform = 'translateY(0)');
+    });
+  </script>
+</body>
+</html>
