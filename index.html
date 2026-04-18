@@ -101,7 +101,7 @@
       min-height:100vh;
       display:grid;
       place-items:center;
-      padding:92px 16px 60px;
+      padding:80px 14px 34px;
     }
     .wrap{width:min(1120px,100%); margin:auto}
     .glass{
@@ -112,7 +112,7 @@
       border-radius:var(--radius-lg);
     }
     .hero-card{
-      padding:42px 24px 30px;
+      padding:34px 20px 22px;
       text-align:center;
       position:relative;
       overflow:hidden;
@@ -149,14 +149,35 @@
     @keyframes pulseGlow{0%,100%{opacity:.55;transform:translateX(50%) scale(1)}50%{opacity:.9;transform:translateX(50%) scale(1.06)}}
     .bible{
       display:inline-block;
-      padding:12px 18px;
+      padding:14px 20px;
       border-radius:999px;
-      background:rgba(255,255,255,.78);
-      border:1px solid rgba(191,148,72,.14);
+      background:linear-gradient(135deg, rgba(255,255,255,.94), rgba(250,242,225,.92));
+      border:1px solid rgba(191,148,72,.18);
       color:var(--muted);
-      font-size:.92rem;
+      font-size:.94rem;
       line-height:1.6;
       max-width:760px;
+      box-shadow:0 10px 28px rgba(95,73,38,.09);
+      position:relative;
+      overflow:hidden;
+      animation:bibleFloat 4s ease-in-out infinite;
+    }
+    .bible::before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background:linear-gradient(120deg, transparent 10%, rgba(255,255,255,.65) 32%, transparent 54%);
+      transform:translateX(-120%);
+      animation:bibleShine 4.8s ease-in-out infinite;
+      pointer-events:none;
+    }
+    @keyframes bibleFloat{
+      0%,100%{transform:translateY(0) scale(1)}
+      50%{transform:translateY(-4px) scale(1.01)}
+    }
+    @keyframes bibleShine{
+      0%,15%{transform:translateX(-120%)}
+      45%,100%{transform:translateX(130%)}
     }
     .hero-title{
       margin:18px auto 12px;
@@ -215,16 +236,22 @@
     }
     .hero-note{
       max-width:720px;
-      margin:18px auto 0;
+      margin:12px auto 0;
       color:#6f5839;
-      line-height:1.85;
+      line-height:1.82;
       font-size:1rem;
+      padding:0 4px;
+      animation:noteGlow 4.2s ease-in-out infinite;
+    }
+    @keyframes noteGlow{
+      0%,100%{opacity:.96}
+      50%{opacity:1}
     }
     .hero-stats{
       display:grid;
       grid-template-columns:repeat(2,1fr);
-      gap:14px;
-      margin-top:24px;
+      gap:12px;
+      margin-top:12px;
     }
     .pill-card{
       padding:18px 16px;
@@ -251,12 +278,12 @@
 
     .section-shell{
       display:grid;
-      gap:18px;
+      gap:14px;
       grid-template-columns:1fr 1fr;
       align-items:stretch;
     }
     .card{
-      padding:24px;
+      padding:20px;
       position:relative;
       overflow:hidden;
       border-radius:var(--radius-lg);
@@ -393,9 +420,155 @@
 
     .footer{
       text-align:center;
-      padding:24px 16px 42px;
+      padding:14px 16px 24px;
       color:var(--muted);
       font-size:.92rem;
+    }
+
+
+    .hero-title{
+      perspective:1200px;
+    }
+    .hero-title .line{
+      display:block;
+      overflow:visible;
+      padding:.06em .12em;
+    }
+    .hero-title .char{
+      transform-origin:50% 100%;
+    }
+    .hero.visible .hero-title .char{
+      animation:charGlow 3.8s ease-in-out infinite;
+    }
+    @keyframes charGlow{
+      0%,100%{text-shadow:0 0 0 rgba(191,148,72,0); filter:blur(0)}
+      50%{text-shadow:0 8px 24px rgba(191,148,72,.22); filter:blur(0)}
+    }
+
+    .card,
+    .pill-card,
+    .closing{
+      transition:transform .65s var(--ease), box-shadow .65s var(--ease), border-color .45s ease, background .45s ease;
+      will-change:transform;
+    }
+    .card:hover,
+    .pill-card:hover,
+    .closing:hover{
+      transform:translateY(-8px) scale(1.01);
+      box-shadow:0 20px 44px rgba(95,73,38,.14);
+      border-color:rgba(191,148,72,.24);
+    }
+
+    .card::before,
+    .hero-card::before{
+      background-size:200% 200%, 200% 200%;
+      animation:shimmerFlow 10s ease-in-out infinite alternate;
+    }
+    @keyframes shimmerFlow{
+      0%{background-position:0% 0%, 0% 0%}
+      100%{background-position:100% 100%, 100% 0%}
+    }
+
+    .scroll-float{
+      opacity:0;
+      transform:translate3d(0,42px,0) scale(.96);
+      transition:opacity .9s ease, transform 1s var(--ease);
+    }
+    .visible.scroll-float{
+      opacity:1;
+      transform:translate3d(0,0,0) scale(1);
+    }
+
+    .from-left{
+      opacity:0;
+      transform:translate3d(-56px,26px,0) rotate(-2deg);
+      transition:opacity .85s ease, transform 1s var(--ease);
+    }
+    .visible.from-left{
+      opacity:1;
+      transform:translate3d(0,0,0) rotate(0);
+    }
+
+    .from-right{
+      opacity:0;
+      transform:translate3d(56px,26px,0) rotate(2deg);
+      transition:opacity .85s ease, transform 1s var(--ease);
+    }
+    .visible.from-right{
+      opacity:1;
+      transform:translate3d(0,0,0) rotate(0);
+    }
+
+    .zoom-in{
+      opacity:0;
+      transform:scale(.92) translateY(24px);
+      transition:opacity .8s ease, transform 1s var(--ease);
+    }
+    .visible.zoom-in{
+      opacity:1;
+      transform:scale(1) translateY(0);
+    }
+
+    .detail{
+      transition:all .7s var(--ease);
+    }
+    .detail:hover{
+      transform:translateY(-6px);
+      box-shadow:0 14px 28px rgba(95,73,38,.08);
+    }
+
+    .story .moment{
+      transition:transform .55s var(--ease), box-shadow .55s ease, border-color .45s ease;
+    }
+    .story .moment:hover{
+      transform:translateX(8px);
+      box-shadow:0 14px 28px rgba(95,73,38,.08);
+      border-color:rgba(191,148,72,.24);
+    }
+
+
+
+    .hero-card{
+      animation:heroLift 1.2s var(--ease);
+    }
+    @keyframes heroLift{
+      0%{opacity:0; transform:translateY(34px) scale(.98)}
+      100%{opacity:1; transform:translateY(0) scale(1)}
+    }
+
+    .glass,
+    .card{
+      position:relative;
+    }
+    .glass::before,
+    .card::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      border-radius:inherit;
+      background:linear-gradient(135deg, rgba(255,255,255,.08), transparent 34%, rgba(191,148,72,.05) 65%, transparent 100%);
+      pointer-events:none;
+      opacity:.9;
+    }
+
+    .hero-stats .pill-card:nth-child(1){animation-delay:.08s}
+    .hero-stats .pill-card:nth-child(2){animation-delay:.16s}
+    .hero-stats .pill-card:nth-child(3){animation-delay:.24s}
+    .pill-card{
+      animation:statRise .9s var(--ease) both;
+    }
+    @keyframes statRise{
+      0%{opacity:0; transform:translateY(22px) scale(.96)}
+      100%{opacity:1; transform:translateY(0) scale(1)}
+    }
+
+    .kicker{
+      box-shadow:0 8px 20px rgba(191,148,72,.08);
+    }
+
+    .detail,
+    .moment{
+      backdrop-filter:blur(6px);
     }
 
     @media (max-width: 860px){
@@ -449,19 +622,18 @@
     <div class="wrap hero visible">
       <div class="hero-card glass reveal parallax zoom-in" data-speed="0.04">
         <div class="hero-glow" aria-hidden="true"></div>
-        <div class="bible fade-up serif">“My beloved is mine, and I am his” — Songs of Solomon 2:16</div>
+        <div class="bible fade-up serif zoom-in">“My beloved is mine, and I am his” — Songs of Solomon 2:16</div>
         <div class="divider"></div>
-        <h1 class="hero-title" id="animatedTitle">
+        <h1 class="hero-title reveal" id="animatedTitle">
           <span class="line">Jaison</span>
           <span class="amp serif">weds</span>
           <span class="line">Glory</span>
         </h1>
-        <p class="hero-note fade-up">
+        <p class="hero-note fade-up scroll-float">
           With grateful hearts and joyful love, we warmly invite you to be part of our engagement and wedding celebration.
-          Scroll down to watch this invitation gently bloom.
         </p>
 
-        <div class="hero-stats fade-up">
+        <div class="hero-stats fade-up scroll-float">
           <div class="pill-card">
             <strong>Engagement</strong>
             Saturday 23 May 2026<br>@ 10:30 am
@@ -479,7 +651,7 @@
 
   <section id="engagement">
     <div class="wrap section-shell">
-      <article class="card reveal parallax from-left" data-speed="0.06">
+      <article class="card reveal parallax from-left scroll-float" data-speed="0.06">
         <span class="kicker">Engagement Details</span>
         <h2 class="headline word-wave">A graceful beginning</h2>
         <p class="desc fade-up">Join us as our families gather in prayer, joy, and love to celebrate the beginning of our forever.</p>
@@ -493,10 +665,18 @@
             <div class="label">Time</div>
             <div class="value">@ 10:30 am</div>
           </div>
+          <div class="detail">
+            <div class="label">Venue location</div>
+            <div class="value">St. Kuriakose Parish Hall, Ennathu</div>
+          </div>
+          <div class="detail">
+            <div class="label">Location link</div>
+            <div class="value"><a href="https://maps.app.goo.gl/rUH13Qhyj4Tj8BMC7" target="_blank" rel="noopener">Open map ↗</a></div>
+          </div>
         </div>
       </article>
 
-      <article class="card reveal from-right">
+      <article class="card reveal from-right scroll-float">
         <span class="kicker">Ceremony Flow</span>
         <h2 class="headline fade-up">Moments to cherish</h2>
         <div class="story fade-up">
@@ -509,7 +689,7 @@
 
   <section id="wedding">
     <div class="wrap section-shell">
-      <article class="card reveal from-left">
+      <article class="card reveal from-left scroll-float">
         <span class="kicker">Wedding Details</span>
         <h2 class="headline word-wave">Our blessed day</h2>
         <p class="desc fade-up">Your presence will make our wedding day even more beautiful. We would be delighted to celebrate this sacred moment with you.</p>
@@ -523,10 +703,18 @@
             <div class="label">Time</div>
             <div class="value">@ 10:30 am</div>
           </div>
+          <div class="detail">
+            <div class="label">Venue location</div>
+            <div class="value">Loyal Convention Centre, Kumbanadu, Thiruvalla</div>
+          </div>
+          <div class="detail">
+            <div class="label">Location link</div>
+            <div class="value"><a href="https://maps.app.goo.gl/hF189m5P3u7TQ6XQ9" target="_blank" rel="noopener">Open map ↗</a></div>
+          </div>
         </div>
       </article>
 
-      <article class="card reveal parallax from-right" data-speed="0.08">
+      <article class="card reveal parallax from-right scroll-float" data-speed="0.08">
         <span class="kicker">Wedding Celebration</span>
         <h2 class="headline fade-up">Love, prayer & joy</h2>
         <div class="story fade-up">
@@ -540,7 +728,7 @@
 
   <section id="blessing">
     <div class="wrap">
-      <div class="glass closing reveal parallax zoom-in" data-speed="0.04">
+      <div class="glass closing reveal parallax zoom-in scroll-float" data-speed="0.04">
         <div class="serif word-wave">We would be honored by your presence and prayers as we celebrate this beautiful beginning together.</div>
       </div>
     </div>
@@ -557,8 +745,8 @@
         const span = document.createElement('span');
         span.className = 'char';
         span.textContent = ch === ' ' ? '\u00A0' : ch;
-        span.style.transitionDelay = (lineIndex * 0.32 + i * 0.075) + 's';
-        span.style.animationDelay = (lineIndex * 0.32 + i * 0.075 + 1.1) + 's';
+        span.style.transitionDelay = (lineIndex * 0.24 + i * 0.065) + 's';
+        span.style.animationDelay = (lineIndex * 0.24 + i * 0.065 + 0.95) + 's';
         line.appendChild(span);
       });
     });
