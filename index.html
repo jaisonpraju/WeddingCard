@@ -23,6 +23,7 @@
       --shadow:0 14px 36px rgba(95,73,38,.10);
       --radius:30px;
       --radius-lg:40px;
+      --ease:cubic-bezier(.2,.8,.2,1);
     }
     *{box-sizing:border-box}
     html{scroll-behavior:smooth}
@@ -51,9 +52,8 @@
       background:linear-gradient(90deg,var(--gold-deep),var(--gold),var(--gold-soft));
       box-shadow:0 0 18px rgba(212,175,102,.65);
     }
-    .ambient,.petals{position:fixed; inset:0; pointer-events:none}
+    .ambient{position:fixed; inset:0; pointer-events:none}
     .ambient{z-index:-2; overflow:hidden}
-    .petals{display:none}
     .orb{
       position:absolute;
       border-radius:50%;
@@ -112,7 +112,7 @@
       border-radius:var(--radius-lg);
     }
     .hero-card{
-      padding:38px 22px 30px;
+      padding:42px 24px 30px;
       text-align:center;
       position:relative;
       overflow:hidden;
@@ -135,6 +135,18 @@
       border-radius:32px;
       pointer-events:none;
     }
+    .hero-glow{
+      position:absolute;
+      inset:auto 50% 6% auto;
+      transform:translateX(50%);
+      width:min(84vw,520px);
+      height:110px;
+      background:radial-gradient(circle, rgba(212,175,102,.24), rgba(212,175,102,.05) 55%, transparent 72%);
+      filter:blur(20px);
+      pointer-events:none;
+      animation:pulseGlow 4s ease-in-out infinite;
+    }
+    @keyframes pulseGlow{0%,100%{opacity:.55;transform:translateX(50%) scale(1)}50%{opacity:.9;transform:translateX(50%) scale(1.06)}}
     .bible{
       display:inline-block;
       padding:12px 18px;
@@ -147,30 +159,59 @@
       max-width:760px;
     }
     .hero-title{
-      margin:20px 0 10px;
-      font-size:clamp(3.6rem,12vw,6.8rem);
-      line-height:.94;
-      letter-spacing:.03em;
+      margin:18px auto 12px;
+      max-width:100%;
+      font-size:clamp(3.15rem,12vw,6.6rem);
+      line-height:1.06;
+      letter-spacing:.02em;
       color:var(--gold-soft);
       text-shadow:0 0 10px rgba(191,148,72,.06);
-      padding:0 .1em;
+      padding:0 .32em;
+      overflow:visible;
+      position:relative;
+      z-index:1;
     }
-    .hero-title .line{display:block; overflow:hidden}
+    .hero-title .line{
+      display:block;
+      overflow:visible;
+      padding:.04em 0;
+      white-space:nowrap;
+    }
     .hero-title .char{
       display:inline-block;
       opacity:0;
       transform:translateY(120%) rotate(8deg) scale(.95);
-      transition:transform .85s cubic-bezier(.2,.8,.2,1), opacity .85s ease, filter .85s ease;
+      transition:transform .85s var(--ease), opacity .85s ease, filter .85s ease;
       filter:blur(8px);
+      will-change:transform, opacity;
     }
+    .hero-title::after{
+      content:"";
+      position:absolute;
+      left:12%; right:12%; bottom:.06em;
+      height:1px;
+      background:linear-gradient(90deg, transparent, rgba(191,148,72,.45), transparent);
+      transform:scaleX(.7);
+      opacity:0;
+      transition:transform 1s var(--ease), opacity 1s ease;
+    }
+    .hero.visible .hero-title::after{transform:scaleX(1); opacity:1}
     .hero.visible .hero-title .char{opacity:1; transform:translateY(0) rotate(0) scale(1); filter:blur(0)}
+    .hero.visible .amp{
+      opacity:1;
+      transform:translateY(0) scale(1);
+      letter-spacing:.32em;
+    }
     .amp{
       display:block;
-      font-size:clamp(1.4rem,4vw,2rem);
+      font-size:clamp(1.2rem,4vw,2rem);
       color:var(--gold);
-      margin:.16em 0;
-      letter-spacing:.30em;
+      margin:.24em 0;
+      letter-spacing:.5em;
       text-transform:uppercase;
+      opacity:0;
+      transform:translateY(14px) scale(.96);
+      transition:all .9s var(--ease) .4s;
     }
     .hero-note{
       max-width:720px;
@@ -181,20 +222,25 @@
     }
     .hero-stats{
       display:grid;
-      grid-template-columns:repeat(3,1fr);
+      grid-template-columns:repeat(2,1fr);
       gap:14px;
       margin-top:24px;
     }
     .pill-card{
-      padding:16px;
+      padding:18px 16px;
       border-radius:24px;
       background:linear-gradient(180deg, rgba(255,255,255,.96), rgba(251,246,238,.90));
       border:1px solid rgba(191,148,72,.12);
       color:#5b452b;
+      transform:translateY(18px) scale(.98);
+      opacity:0;
+      transition:transform .7s var(--ease), opacity .7s ease, box-shadow .35s ease;
     }
+    .hero.visible .pill-card{transform:translateY(0) scale(1); opacity:1}
+    .hero.visible .pill-card:nth-child(2){transition-delay:.12s}
     .pill-card strong{display:block; margin-bottom:6px; font-size:.98rem; color:var(--gold-soft)}
     .scroll-cue{
-      margin-top:18px;
+      margin-top:20px;
       display:inline-flex;
       gap:10px;
       align-items:center;
@@ -217,6 +263,7 @@
       background:linear-gradient(180deg, rgba(255,252,247,.96), rgba(250,244,234,.92));
       border:1px solid rgba(191,148,72,.12);
       box-shadow:var(--shadow);
+      transition:transform .85s var(--ease), opacity .85s ease, filter .85s ease;
     }
     .card::after{
       content:"";
@@ -242,7 +289,7 @@
     .headline{
       margin:12px 0 10px;
       font-size:clamp(1.55rem,4.8vw,2.5rem);
-      line-height:1;
+      line-height:1.02;
       color:var(--gold-soft);
     }
     .desc{color:#745c3d; line-height:1.8; margin:0 0 16px; font-size:.96rem}
@@ -257,8 +304,8 @@
       background:linear-gradient(180deg, rgba(255,255,255,.94), rgba(250,245,236,.90));
       border:1px solid var(--line);
       opacity:0;
-      transform:translateY(18px);
-      transition:all .55s ease;
+      transform:translateY(24px);
+      transition:all .6s var(--ease);
     }
     .visible .detail{opacity:1; transform:translateY(0)}
     .detail:nth-child(2){transition-delay:.08s}
@@ -273,35 +320,6 @@
     }
     .value{font-size:.97rem; line-height:1.55; color:var(--ivory)}
 
-    .location-box{
-      margin-top:14px;
-      display:grid;
-      grid-template-columns:1fr;
-      gap:14px;
-      align-items:center;
-      padding:18px;
-      border-radius:26px;
-      background:linear-gradient(135deg, rgba(255,255,255,.95), rgba(250,245,236,.90));
-      border:1px solid var(--line);
-    }
-    .actions{display:flex; flex-wrap:wrap; gap:10px; margin-top:12px}
-    .btn{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:8px;
-      padding:13px 18px;
-      border-radius:999px;
-      text-decoration:none;
-      background:linear-gradient(135deg, rgba(255,255,255,.98), rgba(248,241,230,.92));
-      border:1px solid rgba(191,148,72,.16);
-      color:var(--gold-deep);
-      box-shadow:0 6px 18px rgba(95,73,38,.08);
-      transition:transform .2s ease, box-shadow .2s ease, background .2s ease, border-color .2s ease;
-    }
-    .btn:hover{transform:translateY(-2px); box-shadow:0 10px 24px rgba(95,73,38,.12); border-color:rgba(191,148,72,.28)}
-    .btn.primary{background:linear-gradient(135deg, rgba(191,148,72,.16), rgba(245,235,214,.95))}
-
     .story{display:grid; gap:12px}
     .moment{
       position:relative;
@@ -310,8 +328,26 @@
       background:linear-gradient(180deg, rgba(255,255,255,.94), rgba(250,245,236,.90));
       border:1px solid var(--line);
       color:#745c3d;
+      overflow:hidden;
+      transform:translateY(16px);
+      opacity:0;
+      transition:transform .7s var(--ease), opacity .7s ease, box-shadow .35s ease;
     }
-        .moment strong{display:block; color:var(--gold-soft); margin-bottom:6px}
+    .visible .moment{transform:translateY(0); opacity:1}
+    .visible .moment:nth-child(2){transition-delay:.12s}
+    .visible .moment:nth-child(3){transition-delay:.24s}
+    .moment::before{
+      content:"";
+      position:absolute;
+      left:0; top:0; bottom:0;
+      width:4px;
+      background:linear-gradient(180deg, rgba(191,148,72,.18), rgba(191,148,72,.7), rgba(191,148,72,.18));
+      transform:scaleY(.35);
+      transform-origin:center;
+      transition:transform .8s var(--ease);
+    }
+    .visible .moment::before{transform:scaleY(1)}
+    .moment strong{display:block; color:var(--gold-soft); margin-bottom:6px}
 
     .closing{
       text-align:center;
@@ -324,7 +360,8 @@
     .reveal,.fade-up,.word-wave span{
       opacity:0;
       transform:translateY(18px);
-      transition:opacity .55s ease, transform .55s cubic-bezier(.2,.8,.2,1);
+      transition:opacity .7s ease, transform .7s var(--ease), filter .7s ease;
+      filter:blur(4px);
     }
     .visible.reveal,
     .visible .fade-up,
@@ -332,7 +369,18 @@
     .visible.fade-up{
       opacity:1;
       transform:translateY(0);
+      filter:blur(0);
     }
+    .from-left{transform:translateX(-38px) translateY(16px); opacity:0}
+    .from-right{transform:translateX(38px) translateY(16px); opacity:0}
+    .visible.from-left,.visible .from-left,
+    .visible.from-right,.visible .from-right{
+      transform:translateX(0) translateY(0);
+      opacity:1;
+      filter:blur(0);
+    }
+    .zoom-in{transform:scale(.94) translateY(16px); opacity:0}
+    .visible.zoom-in,.visible .zoom-in{transform:scale(1) translateY(0); opacity:1; filter:blur(0)}
     .word-wave span{display:inline-block}
     .parallax{will-change:transform}
 
@@ -351,12 +399,30 @@
     }
 
     @media (max-width: 860px){
-      .section-shell,.hero-stats,.details,.location-box{grid-template-columns:1fr}
-      .hero-card{padding-top:30px}
-      .nav{gap:4px; padding:8px}
-      .nav a{padding:9px 11px; font-size:.82rem}
-      .card{padding:18px}
-      .actions{justify-content:flex-start}
+      section{padding:88px 14px 44px; min-height:auto}
+      .section-shell,.hero-stats,.details{grid-template-columns:1fr}
+      .hero-card{padding:30px 16px 24px; border-radius:30px}
+      .hero-title{
+        font-size:clamp(2.7rem,14vw,4.1rem);
+        padding:0 .2em;
+        line-height:1.08;
+      }
+      .hero-title .line{white-space:normal}
+      .amp{letter-spacing:.34em; font-size:clamp(1rem,4.4vw,1.3rem)}
+      .nav{gap:4px; padding:8px; overflow:auto; justify-content:flex-start; scrollbar-width:none}
+      .nav::-webkit-scrollbar{display:none}
+      .nav a{padding:9px 11px; font-size:.82rem; white-space:nowrap}
+      .card{padding:18px; border-radius:28px}
+      .details{gap:10px}
+      .detail,.moment,.pill-card{padding:14px}
+      .headline{line-height:1.08}
+      .desc,.hero-note{font-size:.95rem; line-height:1.7}
+      .scroll-cue{font-size:.92rem}
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      *,*::before,*::after{animation:none !important; transition:none !important; scroll-behavior:auto !important}
+      .reveal,.fade-up,.word-wave span,.detail,.moment,.pill-card,.hero-title .char,.amp{opacity:1; transform:none; filter:none}
     }
   </style>
 </head>
@@ -369,7 +435,6 @@
     <div class="orb" style="left:18%;bottom:10%;width:260px;height:260px;background:rgba(212,175,102,.11);animation-duration:17s"></div>
     <div class="orb" style="right:12%;bottom:6%;width:220px;height:220px;background:rgba(212,175,102,.08);animation-duration:13s"></div>
   </div>
-  
 
   <div class="nav-shell">
     <nav class="nav" id="nav">
@@ -382,7 +447,8 @@
 
   <section id="home">
     <div class="wrap hero visible">
-      <div class="hero-card glass reveal parallax" data-speed="0.05">
+      <div class="hero-card glass reveal parallax zoom-in" data-speed="0.04">
+        <div class="hero-glow" aria-hidden="true"></div>
         <div class="bible fade-up serif">“My beloved is mine, and I am his” — Songs of Solomon 2:16</div>
         <div class="divider"></div>
         <h1 class="hero-title" id="animatedTitle">
@@ -404,10 +470,6 @@
             <strong>Wedding</strong>
             Monday, 25 May 2026<br>@ 10:30 am
           </div>
-          <div class="pill-card">
-            <strong>Celebration Venue</strong>
-            Loyal Convention Centre<br>Kumbanadu, Thiruvalla
-          </div>
         </div>
 
         <div class="scroll-cue">Scroll to reveal the celebration ↓</div>
@@ -417,7 +479,7 @@
 
   <section id="engagement">
     <div class="wrap section-shell">
-      <article class="card reveal parallax" data-speed="0.08">
+      <article class="card reveal parallax from-left" data-speed="0.06">
         <span class="kicker">Engagement Details</span>
         <h2 class="headline word-wave">A graceful beginning</h2>
         <p class="desc fade-up">Join us as our families gather in prayer, joy, and love to celebrate the beginning of our forever.</p>
@@ -431,29 +493,10 @@
             <div class="label">Time</div>
             <div class="value">@ 10:30 am</div>
           </div>
-          <div class="detail">
-            <div class="label">Venue</div>
-            <div class="value">St. Kuriakose Parish Hall, Ennathu</div>
-          </div>
-          <div class="detail">
-            <div class="label">Location</div>
-            <div class="value">Tap the venue link below</div>
-          </div>
-        </div>
-
-        <div class="location-box fade-up">
-          <div>
-            <div class="label">Venue location</div>
-            <div class="value">St. Kuriakose Parish Hall, Ennathu</div>
-            <div class="actions">
-              <a class="btn primary" href="https://maps.app.goo.gl/hF189m5P3u7TQ6XQ9" target="_blank" rel="noopener">Open map ↗</a>
-              <a class="btn" href="https://maps.app.goo.gl/hF189m5P3u7TQ6XQ9" target="_blank" rel="noopener">View venue link</a>
-            </div>
-          </div>
         </div>
       </article>
 
-      <article class="card reveal">
+      <article class="card reveal from-right">
         <span class="kicker">Ceremony Flow</span>
         <h2 class="headline fade-up">Moments to cherish</h2>
         <div class="story fade-up">
@@ -466,7 +509,7 @@
 
   <section id="wedding">
     <div class="wrap section-shell">
-      <article class="card reveal">
+      <article class="card reveal from-left">
         <span class="kicker">Wedding Details</span>
         <h2 class="headline word-wave">Our blessed day</h2>
         <p class="desc fade-up">Your presence will make our wedding day even more beautiful. We would be delighted to celebrate this sacred moment with you.</p>
@@ -480,29 +523,10 @@
             <div class="label">Time</div>
             <div class="value">@ 10:30 am</div>
           </div>
-          <div class="detail">
-            <div class="label">Venue</div>
-            <div class="value">Loyal Convention Centre</div>
-          </div>
-          <div class="detail">
-            <div class="label">Place</div>
-            <div class="value">Kumbanadu, Thiruvalla</div>
-          </div>
-        </div>
-
-        <div class="location-box fade-up">
-          <div>
-            <div class="label">Venue location</div>
-            <div class="value">Loyal Convention Centre, Kumbanadu, Thiruvalla</div>
-            <div class="actions">
-              <a class="btn primary" href="https://maps.app.goo.gl/hF189m5P3u7TQ6XQ9" target="_blank" rel="noopener">Open map ↗</a>
-              <a class="btn" href="https://maps.app.goo.gl/hF189m5P3u7TQ6XQ9" target="_blank" rel="noopener">View venue link</a>
-            </div>
-          </div>
         </div>
       </article>
 
-      <article class="card reveal parallax" data-speed="0.1">
+      <article class="card reveal parallax from-right" data-speed="0.08">
         <span class="kicker">Wedding Celebration</span>
         <h2 class="headline fade-up">Love, prayer & joy</h2>
         <div class="story fade-up">
@@ -516,13 +540,13 @@
 
   <section id="blessing">
     <div class="wrap">
-      <div class="glass closing reveal parallax" data-speed="0.05">
+      <div class="glass closing reveal parallax zoom-in" data-speed="0.04">
         <div class="serif word-wave">We would be honored by your presence and prayers as we celebrate this beautiful beginning together.</div>
       </div>
     </div>
   </section>
 
-  <div class="footer">Made with love for Jaison &amp; Glory</div>
+  <div class="footer">Made by Jaison</div>
 
   <script>
     const title = document.getElementById('animatedTitle');
@@ -533,7 +557,8 @@
         const span = document.createElement('span');
         span.className = 'char';
         span.textContent = ch === ' ' ? '\u00A0' : ch;
-        span.style.transitionDelay = (lineIndex * 0.28 + i * 0.07) + 's';
+        span.style.transitionDelay = (lineIndex * 0.32 + i * 0.075) + 's';
+        span.style.animationDelay = (lineIndex * 0.32 + i * 0.075 + 1.1) + 's';
         line.appendChild(span);
       });
     });
@@ -544,7 +569,7 @@
       [...text].forEach((ch, i) => {
         const span = document.createElement('span');
         span.textContent = ch === ' ' ? '\u00A0' : ch;
-        span.style.transitionDelay = (i * 0.04) + 's';
+        span.style.transitionDelay = (i * 0.035) + 's';
         block.appendChild(span);
       });
     });
@@ -561,9 +586,9 @@
       entries.forEach(entry => {
         if (entry.isIntersecting) entry.target.classList.add('visible');
       });
-    }, {threshold: 0.16});
+    }, {threshold: 0.14, rootMargin: '0px 0px -6% 0px'});
 
-    document.querySelectorAll('.reveal, .fade-up, .hero').forEach(el => observer.observe(el));
+    document.querySelectorAll('.reveal, .fade-up, .hero, .card, .closing').forEach(el => observer.observe(el));
 
     const sections = [...document.querySelectorAll('section')];
     const navLinks = [...document.querySelectorAll('.nav a')];
@@ -571,7 +596,7 @@
       let current = sections[0].id;
       sections.forEach(sec => {
         const rect = sec.getBoundingClientRect();
-        if (rect.top <= window.innerHeight * 0.35) current = sec.id;
+        if (rect.top <= window.innerHeight * 0.4) current = sec.id;
       });
       navLinks.forEach(link => {
         link.classList.toggle('active', link.getAttribute('href') === '#' + current);
@@ -584,26 +609,21 @@
       setActiveNav();
       const scrollY = window.scrollY;
       parallaxEls.forEach(el => {
-        const speed = parseFloat(el.dataset.speed || '0.05');
+        if (window.innerWidth <= 860) {
+          el.style.transform = 'translateY(0)';
+          return;
+        }
+        const speed = parseFloat(el.dataset.speed || '0.04');
         const rect = el.getBoundingClientRect();
         const dist = rect.top + rect.height / 2 - window.innerHeight / 2;
         el.style.transform = `translateY(${dist * speed * -1}px)`;
       });
-      document.body.style.backgroundPosition = `0 ${scrollY * 0.025}px, 0 ${scrollY * -0.016}px, 0 ${scrollY * 0.012}px, 0 0`;
+      document.body.style.backgroundPosition = `0 ${scrollY * 0.025}px, 0 ${scrollY * -0.016}px, 0 ${scrollY * 0.012}px`;
     };
 
     document.addEventListener('scroll', onScroll, {passive:true});
+    window.addEventListener('resize', onScroll);
     onScroll();
-
-    const petals = document.getElementById('petals');
-    
-    const nav = document.getElementById('nav');
-    
-
-    document.querySelectorAll('.btn').forEach((btn) => {
-      btn.addEventListener('mouseenter', () => btn.style.transform = 'translateY(-2px)');
-      btn.addEventListener('mouseleave', () => btn.style.transform = 'translateY(0)');
-    });
   </script>
 </body>
 </html>
