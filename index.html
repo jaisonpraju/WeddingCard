@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet">
+
   <style>
     :root{
       --bg:#faf6ef;
@@ -21,10 +22,11 @@
       --muted:#7e6642;
       --line:rgba(191,148,72,.16);
       --shadow:0 14px 36px rgba(95,73,38,.10);
-      --radius:30px;
-      --radius-lg:40px;
+      --radius:28px;
+      --radius-lg:36px;
       --ease:cubic-bezier(.2,.8,.2,1);
     }
+
     *{box-sizing:border-box}
     html{scroll-behavior:smooth}
     body{
@@ -38,6 +40,7 @@
       overflow-x:hidden;
       letter-spacing:.01em;
     }
+
     h1,h2,h3,.serif{font-family:'Cormorant Garamond', Georgia, serif}
     .script{font-family:'Great Vibes', cursive}
     a{color:inherit}
@@ -45,15 +48,23 @@
 
     .progress{
       position:fixed;
-      top:0; left:0;
+      top:0;
+      left:0;
       height:3px;
       width:0;
       z-index:999;
       background:linear-gradient(90deg,var(--gold-deep),var(--gold),var(--gold-soft));
       box-shadow:0 0 18px rgba(212,175,102,.65);
     }
-    .ambient{position:fixed; inset:0; pointer-events:none}
-    .ambient{z-index:-2; overflow:hidden}
+
+    .ambient{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:-2;
+      overflow:hidden;
+    }
+
     .orb{
       position:absolute;
       border-radius:50%;
@@ -61,72 +72,138 @@
       opacity:.35;
       animation:float 18s ease-in-out infinite alternate;
     }
-    @keyframes float{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(18px,-16px,0) scale(1.04)}}
+
+    @keyframes float{
+      from{transform:translate3d(0,0,0) scale(1)}
+      to{transform:translate3d(18px,-16px,0) scale(1.04)}
+    }
 
     .nav-shell{
       position:fixed;
-      top:14px; left:50%;
+      top:14px;
+      left:50%;
       transform:translateX(-50%);
       z-index:100;
-      width:min(94%,560px);
+      width:min(94%,720px);
     }
+
     .nav{
       display:flex;
       justify-content:center;
-      gap:8px;
+      gap:10px;
       padding:10px;
       border-radius:999px;
       background:rgba(255,250,242,.82);
       border:1px solid rgba(191,148,72,.14);
-      backdrop-filter:blur(10px);
+      backdrop-filter:blur(12px);
       box-shadow:var(--shadow);
     }
+
     .nav a{
       text-decoration:none;
       color:var(--muted);
-      padding:10px 14px;
+      padding:12px 18px;
       border-radius:999px;
-      font-size:.92rem;
+      font-size:.95rem;
+      font-weight:500;
       transition:transform .25s ease, background .25s ease, color .25s ease, box-shadow .25s ease;
     }
-    .nav a:hover,.nav a.active{
+
+    .nav a:hover,
+    .nav a.active{
       transform:translateY(-2px);
       background:rgba(212,175,102,.10);
       color:var(--gold-soft);
       box-shadow:inset 0 0 0 1px rgba(212,175,102,.18);
     }
 
+    .compact-title-wrap{
+      position:fixed;
+      top:82px;
+      left:50%;
+      transform:translateX(-50%);
+      z-index:95;
+      width:min(92%,620px);
+      display:flex;
+      justify-content:center;
+      pointer-events:none;
+    }
+
+    .compact-title{
+      padding:10px 24px;
+      border-radius:999px;
+      background:rgba(255,250,242,.90);
+      border:1px solid rgba(191,148,72,.16);
+      backdrop-filter:blur(12px);
+      box-shadow:0 12px 30px rgba(95,73,38,.12);
+      color:var(--gold-soft);
+      font-family:'Cormorant Garamond', Georgia, serif;
+      font-size:clamp(1.05rem,2.5vw,1.5rem);
+      letter-spacing:.03em;
+      opacity:0;
+      transform:translateY(-16px) scale(.94);
+      transition:opacity .45s ease, transform .55s var(--ease);
+      white-space:nowrap;
+    }
+
+    .compact-title.show{
+      opacity:1;
+      transform:translateY(0) scale(1);
+    }
+
     section{
       position:relative;
-      min-height:100vh;
+      min-height:auto;
       display:grid;
       place-items:center;
-      padding:80px 14px 34px;
+      padding:48px 14px;
     }
-    .wrap{width:min(1120px,100%); margin:auto}
+
+    #home{
+      min-height:100vh;
+      padding-top:120px;
+      padding-bottom:40px;
+    }
+
+    .wrap{
+      width:min(1120px,100%);
+      margin:auto;
+    }
+
     .glass{
       background:linear-gradient(180deg, rgba(255,251,245,.95), rgba(255,247,237,.90));
       border:1px solid rgba(191,148,72,.14);
       backdrop-filter:blur(10px);
       box-shadow:var(--shadow);
       border-radius:var(--radius-lg);
+      position:relative;
     }
+
+    .glass::before,
+    .card::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      border-radius:inherit;
+      background:linear-gradient(135deg, rgba(255,255,255,.08), transparent 34%, rgba(191,148,72,.05) 65%, transparent 100%);
+      pointer-events:none;
+      opacity:.9;
+    }
+
     .hero-card{
-      padding:34px 20px 22px;
+      padding:32px 20px 24px;
       text-align:center;
       position:relative;
       overflow:hidden;
       isolation:isolate;
+      animation:heroLift 1.2s var(--ease);
     }
-    .hero-card::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      background:
-        radial-gradient(circle at top left, rgba(212,175,102,.12), transparent 30%),
-        linear-gradient(135deg, rgba(212,175,102,.06), rgba(255,255,255,0) 42%, rgba(212,175,102,.10) 100%);
-      z-index:-1;
+
+    @keyframes heroLift{
+      0%{opacity:0; transform:translateY(34px) scale(.98)}
+      100%{opacity:1; transform:translateY(0) scale(1)}
     }
+
     .hero-card::after{
       content:"";
       position:absolute;
@@ -135,9 +212,10 @@
       border-radius:32px;
       pointer-events:none;
     }
+
     .hero-glow{
       position:absolute;
-      inset:auto 50% 6% auto;
+      inset:auto 50% 8% auto;
       transform:translateX(50%);
       width:min(84vw,520px);
       height:110px;
@@ -146,7 +224,12 @@
       pointer-events:none;
       animation:pulseGlow 4s ease-in-out infinite;
     }
-    @keyframes pulseGlow{0%,100%{opacity:.55;transform:translateX(50%) scale(1)}50%{opacity:.9;transform:translateX(50%) scale(1.06)}}
+
+    @keyframes pulseGlow{
+      0%,100%{opacity:.55;transform:translateX(50%) scale(1)}
+      50%{opacity:.9;transform:translateX(50%) scale(1.06)}
+    }
+
     .bible{
       display:inline-block;
       padding:14px 20px;
@@ -162,6 +245,7 @@
       overflow:hidden;
       animation:bibleFloat 4s ease-in-out infinite;
     }
+
     .bible::before{
       content:"";
       position:absolute;
@@ -171,33 +255,68 @@
       animation:bibleShine 4.8s ease-in-out infinite;
       pointer-events:none;
     }
+
     @keyframes bibleFloat{
       0%,100%{transform:translateY(0) scale(1)}
       50%{transform:translateY(-4px) scale(1.01)}
     }
+
     @keyframes bibleShine{
       0%,15%{transform:translateX(-120%)}
       45%,100%{transform:translateX(130%)}
     }
+
+    .divider{
+      width:110px;
+      height:1px;
+      margin:16px auto;
+      background:linear-gradient(90deg, transparent, rgba(212,175,102,.75), transparent);
+    }
+
     .hero-title{
-      margin:18px auto 12px;
+      margin:18px auto 10px;
       max-width:100%;
-      font-size:clamp(3.15rem,12vw,6.6rem);
-      line-height:1.06;
-      letter-spacing:.02em;
+      font-size:clamp(3rem,9.4vw,6.2rem);
+      line-height:.9;
+      letter-spacing:.01em;
       color:var(--gold-soft);
       text-shadow:0 0 10px rgba(191,148,72,.06);
-      padding:0 .32em;
+      padding:0 .2em;
       overflow:visible;
       position:relative;
       z-index:1;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:.08em;
+      perspective:1200px;
     }
+
+    .hero-title::after{
+      content:"";
+      position:absolute;
+      left:12%;
+      right:12%;
+      bottom:-.1em;
+      height:1px;
+      background:linear-gradient(90deg, transparent, rgba(191,148,72,.45), transparent);
+      transform:scaleX(.7);
+      opacity:0;
+      transition:transform 1s var(--ease), opacity 1s ease;
+    }
+
+    .hero.visible .hero-title::after{
+      transform:scaleX(1);
+      opacity:1;
+    }
+
     .hero-title .line{
       display:block;
       overflow:visible;
       padding:.04em 0;
       white-space:nowrap;
     }
+
     .hero-title .char{
       display:inline-block;
       opacity:0;
@@ -205,54 +324,55 @@
       transition:transform .85s var(--ease), opacity .85s ease, filter .85s ease;
       filter:blur(8px);
       will-change:transform, opacity;
+      transform-origin:50% 100%;
     }
-    .hero-title::after{
-      content:"";
-      position:absolute;
-      left:12%; right:12%; bottom:.06em;
-      height:1px;
-      background:linear-gradient(90deg, transparent, rgba(191,148,72,.45), transparent);
-      transform:scaleX(.7);
-      opacity:0;
-      transition:transform 1s var(--ease), opacity 1s ease;
-    }
-    .hero.visible .hero-title::after{transform:scaleX(1); opacity:1}
-    .hero.visible .hero-title .char{opacity:1; transform:translateY(0) rotate(0) scale(1); filter:blur(0)}
-    .hero.visible .amp{
+
+    .hero.visible .hero-title .char{
       opacity:1;
-      transform:translateY(0) scale(1);
-      letter-spacing:.32em;
+      transform:translateY(0) rotate(0) scale(1);
+      filter:blur(0);
+      animation:charGlow 3.8s ease-in-out infinite;
     }
+
+    @keyframes charGlow{
+      0%,100%{text-shadow:0 0 0 rgba(191,148,72,0)}
+      50%{text-shadow:0 8px 24px rgba(191,148,72,.22)}
+    }
+
     .amp{
       display:block;
-      font-size:clamp(1.2rem,4vw,2rem);
+      font-size:clamp(1rem,2.8vw,1.65rem);
       color:var(--gold);
-      margin:.24em 0;
-      letter-spacing:.5em;
+      margin:.12em 0 .06em;
+      letter-spacing:.28em;
       text-transform:uppercase;
       opacity:0;
       transform:translateY(14px) scale(.96);
       transition:all .9s var(--ease) .4s;
+      white-space:nowrap;
     }
+
+    .hero.visible .amp{
+      opacity:1;
+      transform:translateY(0) scale(1);
+    }
+
     .hero-note{
       max-width:720px;
-      margin:12px auto 0;
+      margin:14px auto 0;
       color:#6f5839;
       line-height:1.82;
       font-size:1rem;
       padding:0 4px;
-      animation:noteGlow 4.2s ease-in-out infinite;
     }
-    @keyframes noteGlow{
-      0%,100%{opacity:.96}
-      50%{opacity:1}
-    }
+
     .hero-stats{
       display:grid;
       grid-template-columns:repeat(2,1fr);
       gap:12px;
-      margin-top:12px;
+      margin-top:14px;
     }
+
     .pill-card{
       padding:18px 16px;
       border-radius:24px;
@@ -262,19 +382,41 @@
       transform:translateY(18px) scale(.98);
       opacity:0;
       transition:transform .7s var(--ease), opacity .7s ease, box-shadow .35s ease;
+      animation:statRise .9s var(--ease) both;
     }
-    .hero.visible .pill-card{transform:translateY(0) scale(1); opacity:1}
+
+    @keyframes statRise{
+      0%{opacity:0; transform:translateY(22px) scale(.96)}
+      100%{opacity:1; transform:translateY(0) scale(1)}
+    }
+
+    .hero.visible .pill-card{
+      transform:translateY(0) scale(1);
+      opacity:1;
+    }
+
     .hero.visible .pill-card:nth-child(2){transition-delay:.12s}
-    .pill-card strong{display:block; margin-bottom:6px; font-size:.98rem; color:var(--gold-soft)}
+
+    .pill-card strong{
+      display:block;
+      margin-bottom:6px;
+      font-size:.98rem;
+      color:var(--gold-soft);
+    }
+
     .scroll-cue{
-      margin-top:20px;
+      margin-top:18px;
       display:inline-flex;
       gap:10px;
       align-items:center;
       color:var(--muted);
       animation:bob 2.3s ease-in-out infinite;
     }
-    @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
+
+    @keyframes bob{
+      0%,100%{transform:translateY(0)}
+      50%{transform:translateY(6px)}
+    }
 
     .section-shell{
       display:grid;
@@ -282,6 +424,7 @@
       grid-template-columns:1fr 1fr;
       align-items:stretch;
     }
+
     .card{
       padding:20px;
       position:relative;
@@ -290,8 +433,9 @@
       background:linear-gradient(180deg, rgba(255,252,247,.96), rgba(250,244,234,.92));
       border:1px solid rgba(191,148,72,.12);
       box-shadow:var(--shadow);
-      transition:transform .85s var(--ease), opacity .85s ease, filter .85s ease;
+      transition:transform .65s var(--ease), box-shadow .65s var(--ease), border-color .45s ease;
     }
+
     .card::after{
       content:"";
       position:absolute;
@@ -302,6 +446,15 @@
       background:radial-gradient(circle, rgba(212,175,102,.16), transparent 68%);
       pointer-events:none;
     }
+
+    .card:hover,
+    .pill-card:hover,
+    .closing:hover{
+      transform:translateY(-8px) scale(1.01);
+      box-shadow:0 20px 44px rgba(95,73,38,.14);
+      border-color:rgba(191,148,72,.24);
+    }
+
     .kicker{
       display:inline-block;
       padding:8px 14px;
@@ -312,19 +465,29 @@
       color:var(--gold);
       background:linear-gradient(90deg, rgba(212,175,102,.12), rgba(212,175,102,.05));
       border:1px solid rgba(212,175,102,.14);
+      box-shadow:0 8px 20px rgba(191,148,72,.08);
     }
+
     .headline{
       margin:12px 0 10px;
       font-size:clamp(1.55rem,4.8vw,2.5rem);
       line-height:1.02;
       color:var(--gold-soft);
     }
-    .desc{color:#745c3d; line-height:1.8; margin:0 0 16px; font-size:.96rem}
+
+    .desc{
+      color:#745c3d;
+      line-height:1.8;
+      margin:0 0 16px;
+      font-size:.96rem;
+    }
+
     .details{
       display:grid;
       gap:12px;
       grid-template-columns:repeat(2,1fr);
     }
+
     .detail{
       padding:16px;
       border-radius:22px;
@@ -332,12 +495,24 @@
       border:1px solid var(--line);
       opacity:0;
       transform:translateY(24px);
-      transition:all .6s var(--ease);
+      transition:all .7s var(--ease);
+      backdrop-filter:blur(6px);
     }
-    .visible .detail{opacity:1; transform:translateY(0)}
+
+    .visible .detail{
+      opacity:1;
+      transform:translateY(0);
+    }
+
     .detail:nth-child(2){transition-delay:.08s}
     .detail:nth-child(3){transition-delay:.16s}
     .detail:nth-child(4){transition-delay:.24s}
+
+    .detail:hover{
+      transform:translateY(-6px);
+      box-shadow:0 14px 28px rgba(95,73,38,.08);
+    }
+
     .label{
       font-size:.72rem;
       text-transform:uppercase;
@@ -345,9 +520,15 @@
       color:var(--gold);
       margin-bottom:8px;
     }
-    .value{font-size:.97rem; line-height:1.55; color:var(--ivory)}
+
+    .value{
+      font-size:.97rem;
+      line-height:1.55;
+      color:var(--ivory);
+    }
 
     .story{display:grid; gap:12px}
+
     .moment{
       position:relative;
       padding:16px 16px 16px 18px;
@@ -359,29 +540,58 @@
       transform:translateY(16px);
       opacity:0;
       transition:transform .7s var(--ease), opacity .7s ease, box-shadow .35s ease;
+      backdrop-filter:blur(6px);
     }
-    .visible .moment{transform:translateY(0); opacity:1}
+
+    .visible .moment{
+      transform:translateY(0);
+      opacity:1;
+    }
+
     .visible .moment:nth-child(2){transition-delay:.12s}
     .visible .moment:nth-child(3){transition-delay:.24s}
+
     .moment::before{
       content:"";
       position:absolute;
-      left:0; top:0; bottom:0;
+      left:0;
+      top:0;
+      bottom:0;
       width:4px;
       background:linear-gradient(180deg, rgba(191,148,72,.18), rgba(191,148,72,.7), rgba(191,148,72,.18));
       transform:scaleY(.35);
       transform-origin:center;
       transition:transform .8s var(--ease);
     }
+
     .visible .moment::before{transform:scaleY(1)}
-    .moment strong{display:block; color:var(--gold-soft); margin-bottom:6px}
+
+    .moment strong{
+      display:block;
+      color:var(--gold-soft);
+      margin-bottom:6px;
+    }
+
+    .story .moment:hover{
+      transform:translateX(8px);
+      box-shadow:0 14px 28px rgba(95,73,38,.08);
+      border-color:rgba(191,148,72,.24);
+    }
 
     .closing{
       text-align:center;
-      padding:40px 18px;
+      padding:34px 18px;
       font-size:clamp(1.05rem,4vw,1.8rem);
       line-height:1.9;
       color:var(--gold-deep);
+      transition:transform .65s var(--ease), box-shadow .65s var(--ease), border-color .45s ease;
+    }
+
+    .footer{
+      text-align:center;
+      padding:8px 16px 22px;
+      color:var(--muted);
+      font-size:.92rem;
     }
 
     .reveal,.fade-up,.word-wave span{
@@ -390,6 +600,7 @@
       transition:opacity .7s ease, transform .7s var(--ease), filter .7s ease;
       filter:blur(4px);
     }
+
     .visible.reveal,
     .visible .fade-up,
     .visible .word-wave span,
@@ -398,92 +609,13 @@
       transform:translateY(0);
       filter:blur(0);
     }
-    .from-left{transform:translateX(-38px) translateY(16px); opacity:0}
-    .from-right{transform:translateX(38px) translateY(16px); opacity:0}
-    .visible.from-left,.visible .from-left,
-    .visible.from-right,.visible .from-right{
-      transform:translateX(0) translateY(0);
-      opacity:1;
-      filter:blur(0);
-    }
-    .zoom-in{transform:scale(.94) translateY(16px); opacity:0}
-    .visible.zoom-in,.visible .zoom-in{transform:scale(1) translateY(0); opacity:1; filter:blur(0)}
-    .word-wave span{display:inline-block}
-    .parallax{will-change:transform}
-
-    .divider{
-      width:110px;
-      height:1px;
-      margin:16px auto;
-      background:linear-gradient(90deg, transparent, rgba(212,175,102,.75), transparent);
-    }
-
-    .footer{
-      text-align:center;
-      padding:14px 16px 24px;
-      color:var(--muted);
-      font-size:.92rem;
-    }
-
-
-    .hero-title{
-      perspective:1200px;
-    }
-    .hero-title .line{
-      display:block;
-      overflow:visible;
-      padding:.06em .12em;
-    }
-    .hero-title .char{
-      transform-origin:50% 100%;
-    }
-    .hero.visible .hero-title .char{
-      animation:charGlow 3.8s ease-in-out infinite;
-    }
-    @keyframes charGlow{
-      0%,100%{text-shadow:0 0 0 rgba(191,148,72,0); filter:blur(0)}
-      50%{text-shadow:0 8px 24px rgba(191,148,72,.22); filter:blur(0)}
-    }
-
-    .card,
-    .pill-card,
-    .closing{
-      transition:transform .65s var(--ease), box-shadow .65s var(--ease), border-color .45s ease, background .45s ease;
-      will-change:transform;
-    }
-    .card:hover,
-    .pill-card:hover,
-    .closing:hover{
-      transform:translateY(-8px) scale(1.01);
-      box-shadow:0 20px 44px rgba(95,73,38,.14);
-      border-color:rgba(191,148,72,.24);
-    }
-
-    .card::before,
-    .hero-card::before{
-      background-size:200% 200%, 200% 200%;
-      animation:shimmerFlow 10s ease-in-out infinite alternate;
-    }
-    @keyframes shimmerFlow{
-      0%{background-position:0% 0%, 0% 0%}
-      100%{background-position:100% 100%, 100% 0%}
-    }
-
-    .scroll-float{
-      opacity:0;
-      transform:translate3d(0,42px,0) scale(.96);
-      transition:opacity .9s ease, transform 1s var(--ease);
-    }
-    .visible.scroll-float{
-      opacity:1;
-      transform:translate3d(0,0,0) scale(1);
-    }
 
     .from-left{
       opacity:0;
       transform:translate3d(-56px,26px,0) rotate(-2deg);
       transition:opacity .85s ease, transform 1s var(--ease);
     }
+
     .visible.from-left{
       opacity:1;
       transform:translate3d(0,0,0) rotate(0);
@@ -494,6 +626,7 @@
       transform:translate3d(56px,26px,0) rotate(2deg);
       transition:opacity .85s ease, transform 1s var(--ease);
     }
+
     .visible.from-right{
       opacity:1;
       transform:translate3d(0,0,0) rotate(0);
@@ -504,89 +637,58 @@
       transform:scale(.92) translateY(24px);
       transition:opacity .8s ease, transform 1s var(--ease);
     }
+
     .visible.zoom-in{
       opacity:1;
       transform:scale(1) translateY(0);
     }
 
-    .detail{
-      transition:all .7s var(--ease);
-    }
-    .detail:hover{
-      transform:translateY(-6px);
-      box-shadow:0 14px 28px rgba(95,73,38,.08);
+    .scroll-float{
+      opacity:0;
+      transform:translate3d(0,42px,0) scale(.96);
+      transition:opacity .9s ease, transform 1s var(--ease);
     }
 
-    .story .moment{
-      transition:transform .55s var(--ease), box-shadow .55s ease, border-color .45s ease;
-    }
-    .story .moment:hover{
-      transform:translateX(8px);
-      box-shadow:0 14px 28px rgba(95,73,38,.08);
-      border-color:rgba(191,148,72,.24);
+    .visible.scroll-float{
+      opacity:1;
+      transform:translate3d(0,0,0) scale(1);
     }
 
-
-
-    .hero-card{
-      animation:heroLift 1.2s var(--ease);
-    }
-    @keyframes heroLift{
-      0%{opacity:0; transform:translateY(34px) scale(.98)}
-      100%{opacity:1; transform:translateY(0) scale(1)}
-    }
-
-    .glass,
-    .card{
-      position:relative;
-    }
-    .glass::before,
-    .card::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      border-radius:inherit;
-      background:linear-gradient(135deg, rgba(255,255,255,.08), transparent 34%, rgba(191,148,72,.05) 65%, transparent 100%);
-      pointer-events:none;
-      opacity:.9;
-    }
-
-    .hero-stats .pill-card:nth-child(1){animation-delay:.08s}
-    .hero-stats .pill-card:nth-child(2){animation-delay:.16s}
-    .hero-stats .pill-card:nth-child(3){animation-delay:.24s}
-    .pill-card{
-      animation:statRise .9s var(--ease) both;
-    }
-    @keyframes statRise{
-      0%{opacity:0; transform:translateY(22px) scale(.96)}
-      100%{opacity:1; transform:translateY(0) scale(1)}
-    }
-
-    .kicker{
-      box-shadow:0 8px 20px rgba(191,148,72,.08);
-    }
-
-    .detail,
-    .moment{
-      backdrop-filter:blur(6px);
-    }
+    .word-wave span{display:inline-block}
+    .parallax{will-change:transform}
 
     @media (max-width: 860px){
-      section{padding:88px 14px 44px; min-height:auto}
+      section{padding:38px 14px}
+      #home{padding-top:112px}
       .section-shell,.hero-stats,.details{grid-template-columns:1fr}
-      .hero-card{padding:30px 16px 24px; border-radius:30px}
+      .hero-card{padding:28px 16px 22px; border-radius:30px}
       .hero-title{
-        font-size:clamp(2.7rem,14vw,4.1rem);
-        padding:0 .2em;
-        line-height:1.08;
+        font-size:clamp(2.5rem,12vw,4rem);
+        padding:0 .1em;
+        line-height:.94;
       }
-      .hero-title .line{white-space:normal}
-      .amp{letter-spacing:.34em; font-size:clamp(1rem,4.4vw,1.3rem)}
-      .nav{gap:4px; padding:8px; overflow:auto; justify-content:flex-start; scrollbar-width:none}
+      .hero-title .line{white-space:nowrap}
+      .amp{
+        letter-spacing:.18em;
+        font-size:clamp(.85rem,3.6vw,1.05rem);
+        margin:.14em 0 .08em;
+      }
+      .nav{
+        gap:6px;
+        padding:8px;
+        overflow:auto;
+        justify-content:flex-start;
+        scrollbar-width:none;
+      }
       .nav::-webkit-scrollbar{display:none}
-      .nav a{padding:9px 11px; font-size:.82rem; white-space:nowrap}
+      .nav a{
+        padding:10px 14px;
+        font-size:.84rem;
+        white-space:nowrap;
+      }
+      .compact-title-wrap{top:72px}
+      .compact-title{font-size:1rem; padding:9px 16px}
       .card{padding:18px; border-radius:28px}
-      .details{gap:10px}
       .detail,.moment,.pill-card{padding:14px}
       .headline{line-height:1.08}
       .desc,.hero-note{font-size:.95rem; line-height:1.7}
@@ -594,8 +696,17 @@
     }
 
     @media (prefers-reduced-motion: reduce){
-      *,*::before,*::after{animation:none !important; transition:none !important; scroll-behavior:auto !important}
-      .reveal,.fade-up,.word-wave span,.detail,.moment,.pill-card,.hero-title .char,.amp{opacity:1; transform:none; filter:none}
+      *,*::before,*::after{
+        animation:none !important;
+        transition:none !important;
+        scroll-behavior:auto !important;
+      }
+      .reveal,.fade-up,.word-wave span,.detail,.moment,.pill-card,.hero-title .char,.amp{
+        opacity:1;
+        transform:none;
+        filter:none;
+      }
+      .compact-title{opacity:1; transform:none}
     }
   </style>
 </head>
@@ -611,24 +722,34 @@
 
   <div class="nav-shell">
     <nav class="nav" id="nav">
-      <a href="#home">Home</a>
+      <a href="#home">J | G</a>
       <a href="#engagement">Engagement</a>
       <a href="#wedding">Wedding</a>
       <a href="#blessing">Blessing</a>
     </nav>
   </div>
 
+  <div class="compact-title-wrap" aria-hidden="true">
+    <div class="compact-title" id="floatingNames">Jaison weds Glory</div>
+  </div>
+
   <section id="home">
     <div class="wrap hero visible">
       <div class="hero-card glass reveal parallax zoom-in" data-speed="0.04">
         <div class="hero-glow" aria-hidden="true"></div>
-        <div class="bible fade-up serif zoom-in">“My beloved is mine, and I am his” — Songs of Solomon 2:16</div>
+
+        <div class="bible fade-up serif zoom-in">
+          “My beloved is mine, and I am his” — Songs of Solomon 2:16
+        </div>
+
         <div class="divider"></div>
+
         <h1 class="hero-title reveal" id="animatedTitle">
           <span class="line">Jaison</span>
           <span class="amp serif">weds</span>
           <span class="line">Glory</span>
         </h1>
+
         <p class="hero-note fade-up scroll-float">
           With grateful hearts and joyful love, we warmly invite you to be part of our engagement and wedding celebration.
         </p>
@@ -654,7 +775,9 @@
       <article class="card reveal parallax from-left scroll-float" data-speed="0.06">
         <span class="kicker">Engagement Details</span>
         <h2 class="headline word-wave">A graceful beginning</h2>
-        <p class="desc fade-up">Join us as our families gather in prayer, joy, and love to celebrate the beginning of our forever.</p>
+        <p class="desc fade-up">
+          Join us as our families gather in prayer, joy, and love to celebrate the beginning of our forever.
+        </p>
 
         <div class="details">
           <div class="detail">
@@ -671,7 +794,9 @@
           </div>
           <div class="detail">
             <div class="label">Location link</div>
-            <div class="value"><a href="https://maps.app.goo.gl/rUH13Qhyj4Tj8BMC7" target="_blank" rel="noopener">Open map ↗</a></div>
+            <div class="value">
+              <a href="https://maps.app.goo.gl/rUH13Qhyj4Tj8BMC7" target="_blank" rel="noopener">Open map ↗</a>
+            </div>
           </div>
         </div>
       </article>
@@ -680,8 +805,14 @@
         <span class="kicker">Ceremony Flow</span>
         <h2 class="headline fade-up">Moments to cherish</h2>
         <div class="story fade-up">
-          <div class="moment"><strong>Warm welcome</strong>Gather with family and loved ones as the day begins with happiness and blessings.</div>
-          <div class="moment"><strong>Celebration</strong>Stay with us for smiles, prayers, photos, and joyful fellowship after the ceremony.</div>
+          <div class="moment">
+            <strong>Warm welcome</strong>
+            Gather with family and loved ones as the day begins with happiness and blessings.
+          </div>
+          <div class="moment">
+            <strong>Celebration</strong>
+            Stay with us for smiles, prayers, photos, and joyful fellowship after the ceremony.
+          </div>
         </div>
       </article>
     </div>
@@ -692,7 +823,9 @@
       <article class="card reveal from-left scroll-float">
         <span class="kicker">Wedding Details</span>
         <h2 class="headline word-wave">Our blessed day</h2>
-        <p class="desc fade-up">Your presence will make our wedding day even more beautiful. We would be delighted to celebrate this sacred moment with you.</p>
+        <p class="desc fade-up">
+          Your presence will make our wedding day even more beautiful. We would be delighted to celebrate this sacred moment with you.
+        </p>
 
         <div class="details">
           <div class="detail">
@@ -709,7 +842,9 @@
           </div>
           <div class="detail">
             <div class="label">Location link</div>
-            <div class="value"><a href="https://maps.app.goo.gl/hF189m5P3u7TQ6XQ9" target="_blank" rel="noopener">Open map ↗</a></div>
+            <div class="value">
+              <a href="https://maps.app.goo.gl/hF189m5P3u7TQ6XQ9" target="_blank" rel="noopener">Open map ↗</a>
+            </div>
           </div>
         </div>
       </article>
@@ -718,9 +853,18 @@
         <span class="kicker">Wedding Celebration</span>
         <h2 class="headline fade-up">Love, prayer & joy</h2>
         <div class="story fade-up">
-          <div class="moment"><strong>Gathering of loved ones</strong>A beautiful morning filled with grace, expectation, and joy.</div>
-          <div class="moment"><strong>Wedding ceremony</strong>The sacred moment where we begin our next chapter together.</div>
-          <div class="moment"><strong>Shared celebration</strong>Stay with us as the happiness continues with family, friends, and heartfelt blessings.</div>
+          <div class="moment">
+            <strong>Gathering of loved ones</strong>
+            A beautiful morning filled with grace, expectation, and joy.
+          </div>
+          <div class="moment">
+            <strong>Wedding ceremony</strong>
+            The sacred moment where we begin our next chapter together.
+          </div>
+          <div class="moment">
+            <strong>Shared celebration</strong>
+            Stay with us as the happiness continues with family, friends, and heartfelt blessings.
+          </div>
         </div>
       </article>
     </div>
@@ -729,7 +873,9 @@
   <section id="blessing">
     <div class="wrap">
       <div class="glass closing reveal parallax zoom-in scroll-float" data-speed="0.04">
-        <div class="serif word-wave">We would be honored by your presence and prayers as we celebrate this beautiful beginning together.</div>
+        <div class="serif word-wave">
+          We would be honored by your presence and prayers as we celebrate this beautiful beginning together.
+        </div>
       </div>
     </div>
   </section>
@@ -763,6 +909,8 @@
     });
 
     const progress = document.getElementById('progress');
+    const floatingNames = document.getElementById('floatingNames');
+
     const updateProgress = () => {
       const h = document.documentElement;
       const total = h.scrollHeight - h.clientHeight;
@@ -774,12 +922,13 @@
       entries.forEach(entry => {
         if (entry.isIntersecting) entry.target.classList.add('visible');
       });
-    }, {threshold: 0.14, rootMargin: '0px 0px -6% 0px'});
+    }, { threshold: 0.14, rootMargin: '0px 0px -6% 0px' });
 
     document.querySelectorAll('.reveal, .fade-up, .hero, .card, .closing').forEach(el => observer.observe(el));
 
     const sections = [...document.querySelectorAll('section')];
     const navLinks = [...document.querySelectorAll('.nav a')];
+
     const setActiveNav = () => {
       let current = sections[0].id;
       sections.forEach(sec => {
@@ -792,10 +941,18 @@
     };
 
     const parallaxEls = [...document.querySelectorAll('.parallax')];
+
     const onScroll = () => {
       updateProgress();
       setActiveNav();
+
       const scrollY = window.scrollY;
+
+      if (floatingNames) {
+        const compact = scrollY > 110;
+        floatingNames.classList.toggle('show', compact);
+      }
+
       parallaxEls.forEach(el => {
         if (window.innerWidth <= 860) {
           el.style.transform = 'translateY(0)';
@@ -806,10 +963,11 @@
         const dist = rect.top + rect.height / 2 - window.innerHeight / 2;
         el.style.transform = `translateY(${dist * speed * -1}px)`;
       });
+
       document.body.style.backgroundPosition = `0 ${scrollY * 0.025}px, 0 ${scrollY * -0.016}px, 0 ${scrollY * 0.012}px`;
     };
 
-    document.addEventListener('scroll', onScroll, {passive:true});
+    document.addEventListener('scroll', onScroll, { passive:true });
     window.addEventListener('resize', onScroll);
     onScroll();
   </script>
